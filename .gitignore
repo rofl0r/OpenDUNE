@@ -8,12 +8,3 @@ Makefile
 Makefile.am
 bin
 !bin/data/put_dune2_here.txt
-!bin/data/dune.cfg
-projects
-!projects/generate
-!projects/*.in
-!projects/*.filters
-!projects/*.sln
-!projects/*.vcproj
-!projects/*.vcproj.user
-!projects/*.vcxproj
