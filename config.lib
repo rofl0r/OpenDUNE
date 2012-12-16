@@ -25,7 +25,7 @@ set_default() {
 	cpu_type="DETECT"
 	revision=""
 	config_log="config.log"
-	prefix_dir="/usr/local"
+	prefix="/usr/local"
 	binary_dir="games"
 	data_dir="share/games/opendune"
 	install_dir="/"
@@ -57,7 +57,7 @@ set_default() {
 		cpu_type
 		revision
 		config_log
-		prefix_dir
+		prefix
 		binary_dir
 		data_dir
 		binary_name
@@ -122,8 +122,8 @@ detect_params() {
 			--lipo=*)                     lipo="$optarg";;
 
 
-			--prefix-dir)                 prevp_p="prefix-dir";;
-			--prefix-dir=*)               prefix_dir="$optarg";;
+			--prefix)                     prevp_p="prefix";;
+			--prefix=*)                   prefix="$optarg";;
 
 			--binary-dir)                 prevp_p="binary-dir";;
 			--binary-dir=*)               binary_dir="$optarg";;
@@ -1484,8 +1484,8 @@ make_sed() {
 		s@!!TOOLS_DIR!!@$TOOLS_DIR@g;
 		s@!!OSXAPP!!@$OSXAPP@g;
 		s@!!OPENDUNE!!@$OPENDUNE@g;
-		s@!!BINARY_DIR!!@$prefix_dir/$binary_dir@g;
-		s@!!DATA_DIR!!@$prefix_dir/$data_dir@g;
+		s@!!BINARY_DIR!!@$prefix/$binary_dir@g;
+		s@!!DATA_DIR!!@$prefix/$data_dir@g;
 		s@!!INSTALL_DIR!!@$install_dir@g;
 		s@!!BINARY_NAME!!@$binary_name@g;
 		s@!!DEPEND!!@$DEPEND@g;
@@ -1510,7 +1510,7 @@ make_sed() {
 
 	if [ "$icon_theme_dir" != "" ]; then
 		SRC_REPLACE="$SRC_REPLACE
-			s@!!ICON_THEME_DIR!!@$prefix_dir/$icon_theme_dir@g;
+			s@!!ICON_THEME_DIR!!@$prefix/$icon_theme_dir@g;
 		"
 	else
 		SRC_REPLACE="$SRC_REPLACE
@@ -1520,7 +1520,7 @@ make_sed() {
 
 	if [ "$man_dir" != "" ]; then
 		SRC_REPLACE="$SRC_REPLACE
-			s@!!MAN_DIR!!@$prefix_dir/$man_dir@g;
+			s@!!MAN_DIR!!@$prefix/$man_dir@g;
 		"
 	else
 		SRC_REPLACE="$SRC_REPLACE
@@ -1530,7 +1530,7 @@ make_sed() {
 
 	if [ "$menu_dir" != "" ]; then
 		SRC_REPLACE="$SRC_REPLACE
-			s@!!MENU_DIR!!@$prefix_dir/$menu_dir@g;
+			s@!!MENU_DIR!!@$prefix/$menu_dir@g;
 		"
 	else
 		SRC_REPLACE="$SRC_REPLACE
@@ -1658,12 +1658,12 @@ showhelp() {
 	echo "                                 Use with care!"
 	echo ""
 	echo "Paths:"
-	echo "  --prefix-dir=dir               specifies the prefix for all installed"
+	echo "  --prefix=dir                   specifies the prefix for all installed"
 	echo "                                 files [/usr/local]"
 	echo "  --binary-dir=dir               location of the binary. Will be prefixed"
 	echo "                                 with the prefix-dir [games]"
 	echo "  --data-dir=dir                 location of data files (.PAK files)."
-	echo "                                 Will be prefixed with the prefix-dir"
+	echo "                                 Will be prefixed with the prefix"
 	echo "                                 [share/games/opendune]"
 	echo "  --install-dir=dir              specifies the root to install to."
 	echo "                                 Useful to install into jails [/]"
