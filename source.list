@@ -5,17 +5,9 @@ audio/driver.c
 audio/dsp_win32.c
 audio/midi_win32.c
 #else
-	#if ALSA
-		audio/dsp_alsa.c
-		audio/midi_alsa.c
-	#else
-		#if SDL
-			audio/dsp_sdl.c
-		#else
-			audio/dsp_none.c
-		#endif
-		audio/midi_none.c
-	#endif
+	audio/dsp_sdl.c
+	audio/midi_alsa.c
+
 #endif
 audio/mt32mpu.c
 audio/sound.c
