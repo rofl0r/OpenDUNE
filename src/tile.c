@@ -436,8 +436,6 @@ static const int8 _stepY[256] = {
  */
 tile32 Tile_MoveByDirection(tile32 tile, int16 orientation, uint16 distance)
 {
-	distance = min(distance, 0xFF);
-
 	if (distance == 0) return tile;
 
 	tile.s.x += (64 + _stepX[orientation & 0xFF] * distance) / 128;

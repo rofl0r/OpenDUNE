@@ -99,13 +99,16 @@ static void Unit_Rotate(Unit *unit, uint16 level)
 void Unit_MovementTick(Unit *unit)
 {
 	uint16 speed;
-
 	if (unit->speed == 0) return;
+	if (unit->o.type == UNIT_SONIC_BLAST) {
+		Unit_Move(unit, unit->speed * 16);
+		return;
+	}
 
 	speed = unit->speedRemainder;
 	speed += Tools_AdjustToGameSpeed(unit->speedPerTick, 1, 255, false);
 
-	if ((speed & 0xFF00) != 0) {
+	if (speed & 0xFF00) {
 		Unit_Move(unit, min(unit->speed * 16, Tile_GetDistance(unit->o.position, unit->currentDestination) + 16));
 	}
 
@@ -1883,18 +1886,19 @@ void Unit_SetSpeed(Unit *unit, uint16 speed)
 
 	unit->movingSpeed = speed & 0xFF;
 	speed = g_table_unitInfo[unit->o.type].movingSpeed * speed / 256;
-	speed = Tools_AdjustToGameSpeed(speed, 1, 255, false);
+	speed = Tools_AdjustToGameSpeed(speed, 1, 0xFFFF, false);
 
 	speedPerTick = speed << 4;
 	speed        = speed >> 4;
 
 	if (speed != 0) {
 		speedPerTick = 255;
+		if(speed > 255) speed = 255;
 	} else {
 		speed = 1;
 	}
 
-	unit->speed = speed & 0xFF;
+	unit->speed = speed;
 	unit->speedPerTick = speedPerTick & 0xFF;
 }
 
@@ -1971,7 +1975,7 @@ Unit *Unit_CreateBullet(tile32 position, UnitType type, uint8 houseID, uint16 da
 			if (bullet == NULL) return NULL;
 
 			if (type == UNIT_SONIC_BLAST) {
-				bullet->fireDelay = ui->fireDistance & 0xFF;
+				bullet->fireDelay = Tools_AdjustToGameSpeed(ui->fireDistance * 2, 1, 0xFFFF, true);
 			}
 
 			bullet->currentDestination = tile;
