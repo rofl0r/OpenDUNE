@@ -1975,7 +1975,7 @@ Unit *Unit_CreateBullet(tile32 position, UnitType type, uint8 houseID, uint16 da
 			if (bullet == NULL) return NULL;
 
 			if (type == UNIT_SONIC_BLAST) {
-				bullet->fireDelay = Tools_AdjustToGameSpeed(ui->fireDistance * 2, 1, 0xFFFF, true);
+				bullet->fireDelay = Tools_AdjustToGameSpeed(16, 1, 0xFFFF, true);
 			}
 
 			bullet->currentDestination = tile;
