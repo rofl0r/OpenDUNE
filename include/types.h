@@ -76,6 +76,7 @@ typedef   signed char   int8;
 typedef unsigned short uint16;
 typedef   signed short  int16;
 typedef unsigned int   uint32;
+typedef unsigned int   uint;
 typedef   signed int    int32;
 assert_compile(sizeof(uint8 ) == 1);
 assert_compile(sizeof( int8 ) == 1);
