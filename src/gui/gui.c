@@ -70,8 +70,8 @@ assert_compile(sizeof(StrategicMapData) == 0x8);
 
 /** Coupling between score and rank name. */
 typedef struct RankScore {
-	uint16 rankString; /*!< StringID of the name of the rank. */
-	uint16 score;      /*!< Score needed to obtain the rank. */
+	uint rankString; /*!< StringID of the name of the rank. */
+	uint score;      /*!< Score needed to obtain the rank. */
 } RankScore;
 
 /** Mapping of scores to rank names. */
@@ -1278,7 +1278,7 @@ void GUI_DrawSprite(uint16 screenID, uint8 *sprite, int16 posX, int16 posY, uint
  * @param harvestedEnemy Pointer to the total amount of spice harvested by enemies.
  * @param houseID The houseID of the player.
  */
-static uint16 Update_Score(int16 score, uint16 *harvestedAllied, uint16 *harvestedEnemy, uint8 houseID)
+static uint Update_Score(int score, uint *harvestedAllied, uint *harvestedEnemy, uint8 houseID)
 {
 	PoolFindStruct find;
 	uint16 locdi = 0;
@@ -1323,10 +1323,10 @@ static uint16 Update_Score(int16 score, uint16 *harvestedAllied, uint16 *harvest
 	g_var_38BC--;
 
 	tmp = *harvestedEnemy + loc0C;
-	*harvestedEnemy = (tmp > 65000) ? 65000 : (tmp & 0xFFFF);
+	*harvestedEnemy = tmp;
 
 	tmp = *harvestedAllied + locdi;
-	*harvestedAllied = (tmp > 65000) ? 65000 : (tmp & 0xFFFF);
+	*harvestedAllied = tmp;
 
 	score += House_Get_ByIndex(houseID)->credits / 100;
 
@@ -1358,9 +1358,9 @@ static void GUI_DrawTextOnFilledRectangle(char *string, uint16 top)
 	GUI_DrawText_Wrapper(string, SCREEN_WIDTH / 2, top, 0xF, 0, 0x121);
 }
 
-static uint16 GUI_HallOfFame_GetRank(uint16 score)
+static uint GUI_HallOfFame_GetRank(uint score)
 {
-	uint8 i;
+	uint i;
 
 	for (i = 0; i < lengthof(_rankScores); i++) {
 		if (_rankScores[i].score > score) break;
@@ -1369,16 +1369,18 @@ static uint16 GUI_HallOfFame_GetRank(uint16 score)
 	return min(i, lengthof(_rankScores) - 1);
 }
 
-static void GUI_HallOfFame_DrawRank(uint16 score, bool fadeIn)
+static void GUI_HallOfFame_DrawRank(uint score, bool fadeIn)
 {
-	GUI_DrawText_Wrapper(String_Get_ByIndex(_rankScores[GUI_HallOfFame_GetRank(score)].rankString), SCREEN_WIDTH / 2, 49, 6, 0, 0x122);
+	GUI_DrawText_Wrapper(
+	                     String_Get_ByIndex(_rankScores[GUI_HallOfFame_GetRank(score)].rankString), 
+	                     SCREEN_WIDTH / 2, 49, 6, 0, 0x122);
 
 	if (!fadeIn) return;
 
 	GUI_Screen_FadeIn(10, 49, 10, 49, 20, 12, 2, 0);
 }
 
-static void GUI_HallOfFame_DrawBackground(uint16 score, bool hallOfFame)
+static void GUI_HallOfFame_DrawBackground(uint score, bool hallOfFame)
 {
 	uint16 oldScreenID;
 	uint16 xSrc;
@@ -1414,7 +1416,8 @@ static void GUI_HallOfFame_DrawBackground(uint16 score, bool hallOfFame)
 
 	if (score != 0xFFFF) {
 		char buffer[64];
-		snprintf(buffer, sizeof(buffer), String_Get_ByIndex(STR_TIME_DH_DM), s_ticksPlayed / 60, s_ticksPlayed % 60);
+		snprintf(buffer, sizeof(buffer), String_Get_ByIndex(STR_TIME_DH_DM), 
+		         s_ticksPlayed / 60, s_ticksPlayed % 60);
 
 		if (s_ticksPlayed < 60) {
 			char *hours = strchr(buffer, '0');
@@ -1425,10 +1428,12 @@ static void GUI_HallOfFame_DrawBackground(uint16 score, bool hallOfFame)
 		GUI_DrawText_Wrapper(String_Get_ByIndex(STR_SCORE_D), 72, 15, 15, 0, 0x22, score);
 		GUI_DrawText_Wrapper(buffer, 248, 15, 15, 0, 0x222);
 		/* "You have attained the rank of" */
-		GUI_DrawText_Wrapper(String_Get_ByIndex(STR_YOU_HAVE_ATTAINED_THE_RANK_OF), SCREEN_WIDTH / 2, 38, 15, 0, 0x122);
+		GUI_DrawText_Wrapper(String_Get_ByIndex(STR_YOU_HAVE_ATTAINED_THE_RANK_OF), 
+		                     SCREEN_WIDTH / 2, 38, 15, 0, 0x122);
 	} else {
 		/* "Hall of Fame" */
-		GUI_DrawText_Wrapper(String_Get_ByIndex(STR_HALL_OF_FAME2), SCREEN_WIDTH / 2, 15, 15, 0, 0x122);
+		GUI_DrawText_Wrapper(String_Get_ByIndex(STR_HALL_OF_FAME2), 
+		                     SCREEN_WIDTH / 2, 15, 15, 0, 0x122);
 	}
 
 	switch (g_playerHouseID) {
@@ -1457,7 +1462,7 @@ static void GUI_HallOfFame_DrawBackground(uint16 score, bool hallOfFame)
 	GFX_Screen_SetActive(oldScreenID);
 }
 
-static void GUI_EndStats_Sleep(uint16 delay)
+static void GUI_EndStats_Sleep(uint delay)
 {
 	g_timerTimeout = delay;
 	while (g_timerTimeout != 0) {
@@ -1477,9 +1482,9 @@ static void GUI_EndStats_Sleep(uint16 delay)
  * @param score The base score.
  * @param houseID The houseID of the player.
  */
-void GUI_EndStats_Show(uint16 killedAllied, uint16 killedEnemy, uint16 destroyedAllied, uint16 destroyedEnemy, uint16 harvestedAllied, uint16 harvestedEnemy, int16 score, uint8 houseID)
+void GUI_EndStats_Show(uint killedAllied, uint killedEnemy, uint destroyedAllied, uint destroyedEnemy, uint harvestedAllied, uint harvestedEnemy, int score, uint houseID)
 {
-	uint16 loc06;
+	uint16 width;
 	uint16 oldScreenID;
 	uint16 loc16;
 	uint16 loc18;
@@ -1503,11 +1508,13 @@ void GUI_EndStats_Show(uint16 killedAllied, uint16 killedEnemy, uint16 destroyed
 
 	GUI_DrawTextOnFilledRectangle(String_Get_ByIndex(STR_SPICE_HARVESTED_BY), 83);
 	GUI_DrawTextOnFilledRectangle(String_Get_ByIndex(STR_UNITS_DESTROYED_BY), 119);
-	if (g_scenarioID != 1) GUI_DrawTextOnFilledRectangle(String_Get_ByIndex(STR_BUILDINGS_DESTROYED_BY), 155);
+	if (g_scenarioID != 1) 
+		GUI_DrawTextOnFilledRectangle(String_Get_ByIndex(STR_BUILDINGS_DESTROYED_BY), 155);
 
-	loc06 = max(Font_GetStringWidth(String_Get_ByIndex(STR_YOU)), Font_GetStringWidth(String_Get_ByIndex(STR_ENEMY)));
+	width = max(Font_GetStringWidth(String_Get_ByIndex(STR_YOU)), 
+	            Font_GetStringWidth(String_Get_ByIndex(STR_ENEMY)));
 
-	loc18 = loc06 + 19;
+	loc18 = width + 19;
 	loc1A = 261 - loc18;
 
 	for (i = 0; i < loc16; i++) {
@@ -1538,10 +1545,10 @@ void GUI_EndStats_Show(uint16 killedAllied, uint16 killedEnemy, uint16 destroyed
 		loc32[i][0][0] = loc08;
 		loc32[i][1][0] = loc0A;
 
-		loc06 = max(loc08, loc0A);
+		width = max(loc08, loc0A);
 
-		loc32[i][0][1] = 1 + ((loc06 > loc1A) ? (loc06 / loc1A) : 0);
-		loc32[i][1][1] = 1 + ((loc06 > loc1A) ? (loc06 / loc1A) : 0);
+		loc32[i][0][1] = 1 + ((width > loc1A) ? (width / loc1A) : 0);
+		loc32[i][1][1] = 1 + ((width > loc1A) ? (width / loc1A) : 0);
 	}
 
 	GUI_EndStats_Sleep(45);
@@ -2029,10 +2036,10 @@ void GUI_DrawCredits(uint8 houseID, uint16 mode)
 	char charCreditsOld[7];
 	char charCreditsNew[7];
 	int i;
-	int16 creditsDiff;
-	int16 creditsNew;
-	int16 creditsOld;
-	int16 offset;
+	int creditsDiff;
+	int creditsNew;
+	int creditsOld;
+	int offset;
 
 	if (s_tickCreditsAnimation > g_timerGUI && mode == 0) return;
 	s_tickCreditsAnimation = g_timerGUI + 1;
@@ -2052,7 +2059,7 @@ void GUI_DrawCredits(uint8 houseID, uint16 mode)
 
 	creditsDiff = h->credits - creditsAnimation;
 	if (creditsDiff != 0) {
-		int16 diff = creditsDiff / 4;
+		int diff = creditsDiff / 4;
 		if (diff == 0)   diff = (creditsDiff < 0) ? -1 : 1;
 		if (diff > 128)  diff = 128;
 		if (diff < -128) diff = -128;
@@ -2581,7 +2588,7 @@ static uint32 GUI_FactoryWindow_LoadGraymapTbl()
 	return 256;
 }
 
-static uint16 GUI_FactoryWindow_CalculateStarportPrice(uint16 credits)
+static uint16 GUI_FactoryWindow_CalculateStarportPrice(uint credits)
 {
 	credits = (credits / 10) * 4 + (credits / 10) * (Tools_RandomLCG_Range(0, 6) + Tools_RandomLCG_Range(0, 6));
 
@@ -4167,7 +4174,7 @@ static void GUI_HallOfFame_Decode(HallOfFameStruct *data)
 	for (d = (uint8 *)data, i = 0; i < 128; i++, d++) *d = (*d ^ 0xA7) - i;
 }
 
-static uint16 GUI_HallOfFame_InsertScore(HallOfFameStruct *data, uint16 score)
+static uint16 GUI_HallOfFame_InsertScore(HallOfFameStruct *data, uint score)
 {
 	uint16 i;
 	for (i = 0; i < 8; i++, data++) {
@@ -4186,7 +4193,7 @@ static uint16 GUI_HallOfFame_InsertScore(HallOfFameStruct *data, uint16 score)
 	return 0;
 }
 
-void GUI_HallOfFame_Show(uint16 score)
+void GUI_HallOfFame_Show(uint score)
 {
 	uint16 width;
 	uint16 editLine;
@@ -4314,7 +4321,7 @@ uint16 GUI_HallOfFame_DrawData(HallOfFameStruct *data, bool show)
 	uint16 offsetY;
 	uint16 scoreX;
 	uint16 battleX;
-	uint8 i;
+	uint i;
 
 	oldScreenID = GFX_Screen_SetActive(2);
 	GUI_DrawFilledRectangle(8, 80, 311, 178, 116);

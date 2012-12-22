@@ -115,7 +115,7 @@ extern void GUI_UpdateProductionStringID();
 extern uint16 GUI_DisplayModalMessage(char *str, uint16 stringID, ...);
 extern uint16 GUI_SplitText(char *str, uint16 maxwidth, char delimiter);
 extern void GUI_DrawSprite(uint16 memory, uint8 *sprite, int16 posX, int16 posY, uint16 windowID, uint16 flags, ...);
-extern void GUI_EndStats_Show(uint16 killedAllied, uint16 killedEnemy, uint16 destroyedAllied, uint16 destroyedEnemy, uint16 harvestedAllied, uint16 harvestedEnemy, int16 score, uint8 houseID);
+extern void GUI_EndStats_Show(uint killedAllied, uint killedEnemy, uint destroyedAllied, uint destroyedEnemy, uint harvestedAllied, uint harvestedEnemy, int score, uint houseID);
 extern uint8 GUI_PickHouse();
 extern void GUI_Palette_CreateMapping(uint8 *palette, uint8 *colors, uint8 reference, uint8 intensity);
 extern void GUI_DrawBorder(uint16 left, uint16 top, uint16 width, uint16 height, uint16 colourSchemaIndex, bool fill);
@@ -155,7 +155,7 @@ extern void GUI_DrawBlockedRectangle(int16 left, int16 top, int16 width, int16 h
 extern void GUI_Mouse_SetPosition(uint16 x, uint16 y);
 extern void GUI_Palette_RemapScreen(uint16 left, uint16 top, uint16 width, uint16 height, uint16 screenID, uint8 *remap);
 extern uint16 GUI_HallOfFame_Tick();
-extern void GUI_HallOfFame_Show(uint16 score);
+extern void GUI_HallOfFame_Show(uint score);
 extern uint16 GUI_HallOfFame_DrawData(HallOfFameStruct *data, bool show);
 extern void GUI_DrawXorFilledRectangle(int16 left, int16 top, int16 right, int16 bottom, uint8 colour);
 extern void GUI_Palette_CreateRemap(uint8 houseID);
