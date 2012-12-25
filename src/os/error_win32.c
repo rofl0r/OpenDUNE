@@ -19,3 +19,13 @@ void Error(const char *format, ...) {
 
 	MessageBox(NULL, message, "Error", MB_OK);
 }
+
+void Warning(const char *format, ...) {
+	char message[512];
+	va_list ap;
+
+	va_start(ap, format);
+	vsnprintf(message, sizeof(message), format, ap);
+	vfprintf(stderr, format, ap);
+	va_end(ap);
+}

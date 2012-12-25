@@ -17,3 +17,11 @@ void Error(const char *format, ...) {
 	vfprintf(stderr, format, ap);
 	va_end(ap);
 }
+
+void Warning(const char *format, ...) {
+	va_list ap;
+
+	va_start(ap, format);
+	vfprintf(stderr, format, ap);
+	va_end(ap);
+}
