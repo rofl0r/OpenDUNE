@@ -1089,7 +1089,7 @@ static void GameLoop_GameCredits(void)
 
 	GFX_SetPalette(g_palette1);
 
-	while (true) {
+	for (;; sleepIdle()) {
 		File_ReadBlockFile(String_GenerateFilename("CREDITS"), s_buffer_1832, GFX_Screen_GetSize_ByIndex(SCREEN_3));
 
 		GameCredits_Play(s_buffer_1832, 20, SCREEN_1, SCREEN_2, 6);
@@ -1097,7 +1097,6 @@ static void GameLoop_GameCredits(void)
 		if (Input_Keyboard_NextKey() != 0) break;
 
 		Music_Play(33);
-		sleepIdle();
 	}
 
 	GUI_SetPaletteAnimated(g_palette2, 60);
