@@ -1266,14 +1266,12 @@ static void Gameloop_Logos(void)
 	g_timerTimeout = 360;
 
 	while (true) {
-		uint32 loc04;
 		bool displayed;
 
 		displayed = WSA_DisplayFrame(wsa, frame++, 0, 0, SCREEN_0);
 		if (!displayed) break;
 
-		loc04 = g_timerGUI + 6;
-		while (loc04 > g_timerGUI) sleepIdle();
+		Timer_Sleep(6);
 	}
 
 	WSA_Unload(wsa);
@@ -1286,11 +1284,8 @@ static void Gameloop_Logos(void)
 		}
 	}
 
-	while (g_timerTimeout != 0) {
-		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) {
-			sleepIdle();
-			continue;
-		}
+	for (; g_timerTimeout != 0; sleepIdle()) {
+		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) continue;
 
 		GUI_SetPaletteAnimated(g_palette2, 30);
 
@@ -1304,11 +1299,8 @@ static void Gameloop_Logos(void)
 
 	while (Driver_Music_IsPlaying()) sleepIdle();
 
-	while (g_timerTimeout != 0) {
-		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) {
-			sleepIdle();
-			continue;
-		}
+	for (; g_timerTimeout != 0; sleepIdle()) {
+		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) continue;
 
 		GUI_SetPaletteAnimated(g_palette2, 30);
 
@@ -1328,12 +1320,8 @@ static void Gameloop_Logos(void)
 
 	GUI_SetPaletteAnimated(g_palette_998A, 30);
 
-	g_timerTimeout = 60;
-	while (g_timerTimeout != 0) {
-		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) {
-			sleepIdle();
-			continue;
-		}
+	for (g_timerTimeout = 60; g_timerTimeout != 0; sleepIdle()) {
+		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) continue;
 
 		GUI_SetPaletteAnimated(g_palette2, 30);
 
@@ -1353,14 +1341,15 @@ static void Gameloop_Logos(void)
 
 	GUI_SetPaletteAnimated(g_palette_998A, 30);
 
-	g_timerTimeout = 180;
-	while (g_timerTimeout != 0) {
-		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) {
-			sleepIdle();
-			continue;
-		}
+	for (g_timerTimeout = 180; g_timerTimeout != 0; sleepIdle()) {
+		if (Input_Keyboard_NextKey() == 0 || !s_var_37B4) continue;
 
-		break;
+		GUI_SetPaletteAnimated(g_palette2, 30);
+
+		GUI_ClearScreen(SCREEN_0);
+
+		GFX_Screen_SetActive(oldScreenID);
+		return;
 	}
 
 	GUI_SetPaletteAnimated(g_palette2, 30);
@@ -1846,7 +1835,7 @@ static void GameLoop_GameIntroAnimationMenu(void)
 
 		stringID = STR_REPLAY_INTRODUCTION;
 
-		while (true) {
+		for (;; sleepIdle()) {
 			char *strings[6];
 
 			switch (stringID) {
@@ -1996,8 +1985,6 @@ static void GameLoop_GameIntroAnimationMenu(void)
 			GUI_PaletteAnimate();
 
 			if (stringID == STR_PLAY_A_GAME) break;
-
-			sleepIdle();
 		}
 	} else {
 		Music_Play(0);
@@ -2145,7 +2132,7 @@ static void GameLoop_Main(void)
 
 	Music_Play(Tools_RandomLCG_Range(0, 5) + 8);
 
-	while (true) {
+	for (;; sleepIdle()) {
 		if (g_gameMode == GM_PICKHOUSE) {
 			Music_Play(28);
 
@@ -2253,8 +2240,6 @@ static void GameLoop_Main(void)
 		}
 
 		if (!g_running) break;
-
-		sleepIdle();
 	}
 
 	GUI_Mouse_Hide_Safe();

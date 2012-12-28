@@ -104,7 +104,7 @@ uint16 GUI_EditBox(char *text, uint16 maxLength, uint16 unknown1, Widget *w, uin
 
 	GUI_Mouse_Show_Safe();
 
-	while (true) {
+	for (;; sleepIdle()) {
 		uint16 keyWidth;
 		uint16 key;
 
@@ -117,10 +117,8 @@ uint16 GUI_EditBox(char *text, uint16 maxLength, uint16 unknown1, Widget *w, uin
 
 		GUI_EditBox_BlinkCursor(positionX + textWidth, false);
 
-		if (key == 0x0) {
-			sleepIdle();
-			continue;
-		}
+		if (key == 0x0) continue;
+
 		if ((key & 0x8000) != 0) {
 			returnValue = key;
 			break;
@@ -137,10 +135,7 @@ uint16 GUI_EditBox(char *text, uint16 maxLength, uint16 unknown1, Widget *w, uin
 
 		/* Handle backspace */
 		if (key == 0x0F) {
-			if (textLength == 0) {
-				sleepIdle();
-				continue;
-			}
+			if (textLength == 0) continue;
 
 			GUI_EditBox_BlinkCursor(positionX + textWidth, true);
 
@@ -149,24 +144,17 @@ uint16 GUI_EditBox(char *text, uint16 maxLength, uint16 unknown1, Widget *w, uin
 			*(--t) = '\0';
 
 			GUI_EditBox_BlinkCursor(positionX + textWidth, false);
-			sleepIdle();
 			continue;
 		}
 
 		key = Input_Keyboard_HandleKeys(key) & 0xFF;
 
 		/* Names can't start with a space, and should be alpha-numeric */
-		if ((key == 0x20 && textLength == 0) || key < 0x20 || key > 0x7E) {
-			sleepIdle();
-			continue;
-		}
+		if ((key == 0x20 && textLength == 0) || key < 0x20 || key > 0x7E) continue;
 
 		keyWidth = Font_GetCharWidth(key & 0xFF);
 
-		if (textWidth + keyWidth >= maxWidth || textLength >= maxLength) {
-			sleepIdle();
-			continue;
-		}
+		if (textWidth + keyWidth >= maxWidth || textLength >= maxLength) continue;
 
 		/* Add char to the text */
 		*t = key & 0xFF;
@@ -185,8 +173,6 @@ uint16 GUI_EditBox(char *text, uint16 maxLength, uint16 unknown1, Widget *w, uin
 		textWidth += keyWidth;
 
 		GUI_EditBox_BlinkCursor(positionX + textWidth, false);
-
-		sleepIdle();
 	}
 
 	/* Deinitialize */

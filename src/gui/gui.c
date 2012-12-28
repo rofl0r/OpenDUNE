@@ -798,10 +798,8 @@ uint16 GUI_DisplayModalMessage(const char *str, uint16 spriteID, ...)
 
 	GUI_Mouse_Show_Safe();
 
-	g_timerTimeout = 30;
-	while (g_timerTimeout != 0) {
+	for (g_timerTimeout = 30; g_timerTimeout != 0; sleepIdle()) {
 		GUI_PaletteAnimate();
-		sleepIdle();
 	}
 
 	Input_History_Clear();
@@ -1464,10 +1462,8 @@ static void GUI_HallOfFame_DrawBackground(uint score, bool hallOfFame)
 
 static void GUI_EndStats_Sleep(uint delay)
 {
-	g_timerTimeout = delay;
-	while (g_timerTimeout != 0) {
+	for (g_timerTimeout = delay; g_timerTimeout != 0; sleepIdle()) {
 		GUI_HallOfFame_Tick();
-		sleepIdle();
 	}
 }
 
@@ -1618,10 +1614,9 @@ void GUI_EndStats_Show(uint killedAllied, uint killedEnemy, uint destroyedAllied
 
 	Input_History_Clear();
 
-	while (true) {
+	for (;; sleepIdle()) {
 		GUI_HallOfFame_Tick();
 		if (Input_Keyboard_NextKey() != 0) break;
-		sleepIdle();
 	}
 
 	Input_History_Clear();
@@ -1654,7 +1649,7 @@ uint8 GUI_PickHouse(void)
 
 	Voice_LoadVoices(5);
 
-	while (true) {
+	for (;; sleepIdle()) {
 		uint16 yes_no;
 
 		for (i = 0; i < 3; i++) {
@@ -1685,9 +1680,7 @@ uint8 GUI_PickHouse(void)
 		GUI_SetPaletteAnimated(g_palette1, 15);
 		GUI_Mouse_Show_Safe();
 
-		houseID = HOUSE_INVALID;
-
-		while (houseID == HOUSE_INVALID) {
+		for (houseID = HOUSE_INVALID; houseID == HOUSE_INVALID; sleepIdle()) {
 			uint16 key = GUI_Widget_HandleEvents(w);
 
 			GUI_PaletteAnimate();
@@ -1700,8 +1693,6 @@ uint8 GUI_PickHouse(void)
 				case 0x8003: houseID = HOUSE_HARKONNEN; break;
 				default: break;
 			}
-
-			sleepIdle();
 		}
 
 		GUI_Mouse_Hide_Safe();
@@ -1748,11 +1739,10 @@ uint8 GUI_PickHouse(void)
 
 		GUI_Mouse_Show_Safe();
 
-		while (true) {
+		for (;; sleepIdle()) {
 			yes_no = GUI_Mentat_Loop(House_GetWSAHouseFilename(houseID), NULL, NULL, true, w);
 
 			if ((yes_no & 0x8000) != 0) break;
-			sleepIdle();
 		}
 
 		if (yes_no == 0x8001) {
@@ -1777,8 +1767,6 @@ uint8 GUI_PickHouse(void)
 		while (Driver_Voice_IsPlaying()) sleepIdle();
 
 		if (yes_no == 0x8001) break;
-
-		sleepIdle();
 	}
 
 	Music_Play(0);
@@ -2757,8 +2745,7 @@ FactoryResult GUI_DisplayFactoryWindow(bool isConstructionYard, bool isStarPort,
 
 	GUI_FactoryWindow_UpdateSelection(true);
 
-	g_factoryWindowResult = FACTORY_CONTINUE;
-	while (g_factoryWindowResult == FACTORY_CONTINUE) {
+	for (g_factoryWindowResult = FACTORY_CONTINUE; g_factoryWindowResult == FACTORY_CONTINUE; sleepIdle()) {
 		uint16 event;
 
 		GUI_DrawCredits(g_playerHouseID, 0);
@@ -2770,7 +2757,6 @@ FactoryResult GUI_DisplayFactoryWindow(bool isConstructionYard, bool isStarPort,
 		if (event == 0x6E) GUI_Production_ResumeGame_Click(NULL);
 
 		GUI_PaletteAnimate();
-		sleepIdle();
 	}
 
 	GUI_DrawCredits(g_playerHouseID, 1);
@@ -2902,10 +2888,8 @@ static void GUI_StrategicMap_AnimateSelected(uint16 selected, StrategicMapData *
 		GFX_Screen_Copy2((i % 2 == 0) ? 16 : 176, 16, x, y, width, height, SCREEN_1, SCREEN_0, false);
 		GUI_Mouse_Show_Safe();
 
-		g_timerTimeout = 20;
-		while (g_timerTimeout != 0) {
+		for (g_timerTimeout = 20; g_timerTimeout != 0; sleepIdle()) {
 			GUI_StrategicMap_AnimateArrows();
-			sleepIdle();
 		}
 	}
 }
@@ -2980,11 +2964,8 @@ static void GUI_StrategicMap_DrawText(const char *string)
 	for (y = 185; y > 172; y--) {
 		GUI_Screen_Copy(8, y, 8, 165, 24, 14, SCREEN_1, SCREEN_0);
 
-		g_timerTimeout = 3;
-
-		while (g_timerTimeout != 0) {
+		for (g_timerTimeout = 3; g_timerTimeout != 0; sleepIdle()) {
 			if (GUI_StrategicMap_FastForwardToggleWithESC()) break;
-			sleepIdle();
 		}
 	}
 
@@ -2997,7 +2978,7 @@ static uint16 GUI_StrategicMap_ScenarioSelection(uint16 campaignID)
 {
 	uint16 count;
 	char key[6];
-	bool loop = true;
+	bool loop;
 	bool hasRegions = false;
 	char category[16];
 	StrategicMapData data[20];
@@ -3052,13 +3033,10 @@ static uint16 GUI_StrategicMap_ScenarioSelection(uint16 campaignID)
 	GUI_Mouse_Show_Safe();
 	Input_History_Clear();
 
-	while (loop) {
+	for (loop = true; loop; sleepIdle()) {
 		region = GUI_StrategicMap_ClickedRegion();
 
-		if (region == 0) {
-			sleepIdle();
-			continue;
-		}
+		if (region == 0) continue;
 
 		for (i = 0; i < count; i++) {
 			GUI_StrategicMap_AnimateArrows();
@@ -3069,8 +3047,6 @@ static uint16 GUI_StrategicMap_ScenarioSelection(uint16 campaignID)
 				break;
 			}
 		}
-
-		sleepIdle();
 	}
 
 	GUI_StrategicMap_SetRegionDone(region, true);
@@ -3283,13 +3259,10 @@ uint16 GUI_StrategicMap_Show(uint16 campaignID, bool win)
 
 		Input_History_Clear();
 
-		g_timerTimeout = 120;
-
 		Sprites_CPS_LoadRegionClick();
 
-		while (g_timerTimeout != 0) {
+		for (g_timerTimeout = 120; g_timerTimeout != 0; sleepIdle()) {
 			if (GUI_StrategicMap_FastForwardToggleWithESC()) break;
-			sleepIdle();
 		}
 
 		Sprites_LoadImage("DUNEMAP.CPS", SCREEN_1 , g_palette_998A);
@@ -3298,9 +3271,7 @@ uint16 GUI_StrategicMap_Show(uint16 campaignID, bool win)
 
 		GUI_Screen_FadeIn2(8, 24, 304, 120, SCREEN_1, SCREEN_0, GUI_StrategicMap_FastForwardToggleWithESC() ? 0 : 1, false);
 
-		g_timerTimeout = 60;
-
-		while (g_timerTimeout != 0) {
+		for (g_timerTimeout = 60; g_timerTimeout != 0; sleepIdle()) {
 			if (GUI_StrategicMap_FastForwardToggleWithESC()) break;
 			sleepIdle();
 		}
@@ -3636,7 +3607,6 @@ void GUI_Screen_FadeIn(uint16 xSrc, uint16 ySrc, uint16 xDst, uint16 yDst, uint1
 	}
 
 	for (y = 0; y < height; y++) {
-		uint32 tick;
 		uint16 y2 = y;
 		for (x = 0; x < width; x++) {
 			uint16 offsetX, offsetY;
@@ -3651,12 +3621,7 @@ void GUI_Screen_FadeIn(uint16 xSrc, uint16 ySrc, uint16 xDst, uint16 yDst, uint1
 		}
 
 		/* XXX -- This delays the system so you can in fact see the animation */
-		if ((y % 4) == 0) {
-			tick = g_timerSleep;
-			while (tick == g_timerSleep) {
-				sleepIdle();
-			}
-		}
+		if ((y % 4) == 0) Timer_Sleep(1);
 	}
 
 	if (screenDst == SCREEN_0) {
@@ -3755,7 +3720,6 @@ void GUI_Screen_FadeIn2(int16 x, int16 y, int16 width, int16 height, Screen scre
 
 	for (j = 0; j < height; j++) {
 		uint16 j2 = j;
-		uint32 tick;
 
 		for (i = 0; i < width; i++) {
 			uint8 colour;
@@ -3775,11 +3739,7 @@ void GUI_Screen_FadeIn2(int16 x, int16 y, int16 width, int16 height, Screen scre
 			GFX_PutPixel(curX, curY, colour);
 		}
 
-		tick = g_timerSleep + delay;
-
-		while (g_timerSleep < tick) {
-			sleepIdle();
-		}
+		Timer_Sleep(delay);
 	}
 
 	if (screenDst == 0) {
@@ -4298,11 +4258,8 @@ void GUI_HallOfFame_Show(uint score)
 
 	GFX_Screen_SetActive(SCREEN_0);
 
-	g_var_81E6 = false;
-
-	while (!g_var_81E6) {
+	for (g_var_81E6 = false; !g_var_81E6; sleepIdle()) {
 		GUI_Widget_HandleEvents(w);
-		sleepIdle();
 	}
 
 	GUI_HallOfFame_DeleteButtons(w);
