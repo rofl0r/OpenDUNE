@@ -219,7 +219,7 @@ void Video_Uninit()
  */
 #if defined(SCREEN_USE_SCALE2X)
 #	if SCREEN_MAGNIFICATION == 2
-void Video_DrawScreen()
+static void Video_DrawScreen()
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
@@ -298,7 +298,7 @@ void Video_DrawScreen()
 	vunlock();
 }
 #	elif SCREEN_MAGNIFICATION == 3
-void Video_DrawScreen()
+static void Video_DrawScreen()
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
@@ -419,7 +419,7 @@ void Video_DrawScreen()
 #	endif /* SCREEN_MAGNIFICATION */
 #else /* SCREEN_USE_SCALE2X */
 #	if SCREEN_MAGNIFICATION == 2
-void Video_DrawScreen()
+static void Video_DrawScreen()
 {
 	uint8 *data;
 	uint8 *gfx1;
@@ -443,7 +443,7 @@ void Video_DrawScreen()
 	vunlock();
 }
 #	elif SCREEN_MAGNIFICATION == 3
-void Video_DrawScreen()
+static void Video_DrawScreen()
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
@@ -472,7 +472,7 @@ void Video_DrawScreen()
 	vunlock();
 }
 #	else /* SCREEN_MAGNIFICATION != 2 != 3 */
-void Video_DrawScreen()
+static void Video_DrawScreen()
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
