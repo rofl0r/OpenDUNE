@@ -80,7 +80,7 @@ static uint8 s_SDL_keymap[] = {
 /**
  * Callback wrapper for mouse actions.
  */
-static void Video_Mouse_Callback()
+static void Video_Mouse_Callback(void)
 {
 	Mouse_EventHandler(s_mousePosX / SCREEN_MAGNIFICATION, s_mousePosY / SCREEN_MAGNIFICATION, s_mouseButtonLeft, s_mouseButtonRight);
 }
@@ -167,7 +167,7 @@ void Video_Mouse_SetRegion(uint16 minX, uint16 maxX, uint16 minY, uint16 maxY)
 /**
  * Initialize the video driver.
  */
-bool Video_Init()
+bool Video_Init(void)
 {
 	if (s_video_initialized) return true;
 	s_video_lock = SDL_CreateMutex();
@@ -206,7 +206,7 @@ bool Video_Init()
 /**
  * Uninitialize the video driver.
  */
-void Video_Uninit()
+void Video_Uninit(void)
 {
 	s_video_initialized = false;
 	SDL_DestroyMutex(s_video_lock);
@@ -219,7 +219,7 @@ void Video_Uninit()
  */
 #if defined(SCREEN_USE_SCALE2X)
 #	if SCREEN_MAGNIFICATION == 2
-static void Video_DrawScreen()
+static void Video_DrawScreen(void)
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
@@ -298,7 +298,7 @@ static void Video_DrawScreen()
 	vunlock();
 }
 #	elif SCREEN_MAGNIFICATION == 3
-static void Video_DrawScreen()
+static void Video_DrawScreen(void)
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
@@ -419,7 +419,7 @@ static void Video_DrawScreen()
 #	endif /* SCREEN_MAGNIFICATION */
 #else /* SCREEN_USE_SCALE2X */
 #	if SCREEN_MAGNIFICATION == 2
-static void Video_DrawScreen()
+static void Video_DrawScreen(void)
 {
 	uint8 *data;
 	uint8 *gfx1;
@@ -443,7 +443,7 @@ static void Video_DrawScreen()
 	vunlock();
 }
 #	elif SCREEN_MAGNIFICATION == 3
-static void Video_DrawScreen()
+static void Video_DrawScreen(void)
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
@@ -472,7 +472,7 @@ static void Video_DrawScreen()
 	vunlock();
 }
 #	else /* SCREEN_MAGNIFICATION != 2 != 3 */
-static void Video_DrawScreen()
+static void Video_DrawScreen(void)
 {
 	vlock();
 	uint8 *data = GFX_Screen_Get_ByIndex(SCREEN_0);
@@ -500,7 +500,7 @@ static void Video_DrawScreen()
 /**
  * Runs every tick to handle video driver updates.
  */
-void Video_Tick()
+void Video_Tick(void)
 {
 	SDL_Event event;
 

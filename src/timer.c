@@ -20,7 +20,7 @@ static uint16 s_timersActive = 0;
 typedef struct TimerNode {
 	uint32 usec_left;
 	uint32 usec_delay;
-	void (*callback)();
+	void (*callback)(void);
 } TimerNode;
 
 
@@ -43,7 +43,7 @@ void Timer_ProcessEvents(void) {
 	SDL_Delay(1);
 }
 
-static uint32 Timer_GetTime() {
+static uint32 Timer_GetTime(void) {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
@@ -106,8 +106,11 @@ void Timer_Init(void) {
 	Timer_InterruptResume();
 }
 
-/* Uninitialize the timer. */
-void Timer_Uninit(void) {
+/**
+ * Uninitialize the timer.
+ */
+void Timer_Uninit(void)
+{
 	Timer_InterruptSuspend();
 
 	free(s_timerNodes); s_timerNodes = NULL;
@@ -120,7 +123,7 @@ void Timer_Uninit(void) {
  * @param callback the callback for the timer.
  * @param usec_delay The interval of the timer.
  */
-void Timer_Add(void (*callback)(), uint32 usec_delay)
+void Timer_Add(void (*callback)(void), uint32 usec_delay)
 {
 	TimerNode *node;
 	if (s_timerNodeCount == s_timerNodeSize) {
@@ -139,7 +142,7 @@ void Timer_Add(void (*callback)(), uint32 usec_delay)
  * @param callback The callback to change the timer of.
  * @param usec_delay The interval.
  */
-void Timer_Change(void (*callback)(), uint32 usec_delay)
+void Timer_Change(void (*callback)(void), uint32 usec_delay)
 {
 	int i;
 	TimerNode *node = s_timerNodes;
@@ -155,7 +158,8 @@ void Timer_Change(void (*callback)(), uint32 usec_delay)
  * Remove a timer from the queue.
  * @param callback Which callback to remove.
  */
-void Timer_Remove(void (*callback)()) {
+void Timer_Remove(void (*callback)(void))
+{
 	int i;
 	TimerNode *node = s_timerNodes;
 	for (i = 0; i < s_timerNodeCount; i++, node++) {
@@ -169,7 +173,8 @@ void Timer_Remove(void (*callback)()) {
 /**
  * Handle game timers.
  */
-void Timer_Tick() {
+void Timer_Tick(void)
+{
 	if ((s_timersActive & TIMER_GUI)  != 0) g_timerGUI++;
 	if ((s_timersActive & TIMER_GAME) != 0) g_timerGame++;
 	g_timerInput++;

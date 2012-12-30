@@ -111,7 +111,7 @@ static void GUI_Mentat_ShowDialog(uint8 houseID, uint16 stringID, const char *ws
 	if (musicID != 0xFFFF) Driver_Music_FadeOut();
 }
 
-static void GUI_Mentat_HelpListLoop()
+static void GUI_Mentat_HelpListLoop(void)
 {
 	uint16 key = 0;
 
@@ -456,7 +456,7 @@ uint16 GUI_Mentat_Show(char *stringBuffer, const char *wsaFilename, Widget *w, b
 /**
  * Show the briefing screen.
  */
-void GUI_Mentat_ShowBriefing()
+void GUI_Mentat_ShowBriefing(void)
 {
 	GUI_Mentat_ShowDialog(g_playerHouseID, g_campaignID * 4 + 4, g_scenario.pictureBriefing, g_table_houseInfo[g_playerHouseID].musicBriefing);
 }
@@ -464,7 +464,7 @@ void GUI_Mentat_ShowBriefing()
 /**
  * Show the win screen.
  */
-void GUI_Mentat_ShowWin()
+void GUI_Mentat_ShowWin(void)
 {
 	GUI_Mentat_ShowDialog(g_playerHouseID, g_campaignID * 4 + 5, g_scenario.pictureWin, g_table_houseInfo[g_playerHouseID].musicWin);
 }
@@ -472,7 +472,7 @@ void GUI_Mentat_ShowWin()
 /**
  * Show the lose screen.
  */
-void GUI_Mentat_ShowLose()
+void GUI_Mentat_ShowLose(void)
 {
 	GUI_Mentat_ShowDialog(g_playerHouseID, g_campaignID * 4 + 6, g_scenario.pictureLose, g_table_houseInfo[g_playerHouseID].musicLose);
 }
@@ -824,7 +824,7 @@ void GUI_Mentat_SelectHelpSubject(int16 difference)
 }
 
 /** Create the widgets of the mentat help screen. */
-void GUI_Mentat_Create_HelpScreen_Widgets()
+void GUI_Mentat_Create_HelpScreen_Widgets(void)
 {
 	static char empty[2] = "";
 	uint16 ypos;
@@ -903,7 +903,7 @@ void GUI_Mentat_Create_HelpScreen_Widgets()
 	GUI_Widget_Draw(g_widgetMentatFirst);
 }
 
-static void GUI_Mentat_ShowHelp()
+static void GUI_Mentat_ShowHelp(void)
 {
 	struct {
 		uint8  notused[8];
@@ -1321,7 +1321,7 @@ uint16 GUI_Mentat_SplitText(char *str, uint16 maxWidth)
 	return lines;
 }
 
-uint16 GUI_Mentat_Tick()
+uint16 GUI_Mentat_Tick(void)
 {
 	GUI_Mentat_Animation((g_interrogationTimer < g_timerGUI) ? 0 : 1);
 

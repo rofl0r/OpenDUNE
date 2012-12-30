@@ -12,7 +12,7 @@
 
 static HMIDIOUT s_midi = NULL;
 
-bool midi_init()
+bool midi_init(void)
 {
 	if (midiOutOpen(&s_midi, 0, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) {
 		Error("Failed to initialize MIDI\n");
@@ -23,7 +23,7 @@ bool midi_init()
 	return true;
 }
 
-void midi_uninit()
+void midi_uninit(void)
 {
 	if (s_midi == NULL) return;
 
@@ -40,7 +40,7 @@ void midi_send(uint32 data)
 	midiOutShortMsg(s_midi, data);
 }
 
-void midi_reset()
+void midi_reset(void)
 {
 	if (s_midi == NULL) return;
 
