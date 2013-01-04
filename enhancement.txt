@@ -58,6 +58,8 @@ Unit
     fire as frequently as a tank on the slowest game speed.
 - At normal game speed, the fire delay for deviators would overflow.  This
     caused deviators to fire almost as often as a trike.
+- When a Unit enters a Structure, the last tile the Unit was on becomes
+    selected rather than the entire Structure.
 
 
 Scenario
