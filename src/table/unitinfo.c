@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "types.h"
 
+#include "../explosion.h"
 #include "../house.h"
 #include "../structure.h"
 #include "../unit.h"
@@ -81,7 +82,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 0,
 		/* damage               */ 0,
-		/* explosionType        */ -1,
+		/* explosionType        */ EXPLOSION_INVALID,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 42
 	},
@@ -154,7 +155,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 50,
 		/* fireDistance         */ 50,
 		/* damage               */ 50,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_MISSILE_TROOPER,
 		/* bulletSound          */ 42
 	},
@@ -227,7 +228,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 45,
 		/* fireDistance         */ 2,
 		/* damage               */ 3,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 58
 	},
@@ -300,7 +301,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 50,
 		/* fireDistance         */ 5,
 		/* damage               */ 5,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 59
 	},
@@ -373,7 +374,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 45,
 		/* fireDistance         */ 2,
 		/* damage               */ 3,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 58
 	},
@@ -446,7 +447,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 50,
 		/* fireDistance         */ 5,
 		/* damage               */ 5,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 59
 	},
@@ -519,7 +520,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 45,
 		/* fireDistance         */ 2,
 		/* damage               */ 2,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 58
 	},
@@ -592,7 +593,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 120,
 		/* fireDistance         */ 9,
 		/* damage               */ 75,
-		/* explosionType        */ 3,
+		/* explosionType        */ EXPLOSION_IMPACT_EXPLODE,
 		/* bulletType           */ UNIT_MISSILE_ROCKET,
 		/* bulletSound          */ -1
 	},
@@ -665,7 +666,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 180,
 		/* fireDistance         */ 7,
 		/* damage               */ 0,
-		/* explosionType        */ 3,
+		/* explosionType        */ EXPLOSION_IMPACT_EXPLODE,
 		/* bulletType           */ UNIT_MISSILE_DEVIATOR,
 		/* bulletSound          */ -1
 	},
@@ -738,7 +739,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 80,
 		/* fireDistance         */ 4,
 		/* damage               */ 25,
-		/* explosionType        */ 1,
+		/* explosionType        */ EXPLOSION_IMPACT_MEDIUM,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 57
 	},
@@ -811,7 +812,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 90,
 		/* fireDistance         */ 5,
 		/* damage               */ 30,
-		/* explosionType        */ 1,
+		/* explosionType        */ EXPLOSION_IMPACT_MEDIUM,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 57
 	},
@@ -884,7 +885,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 100,
 		/* fireDistance         */ 5,
 		/* damage               */ 40,
-		/* explosionType        */ 1,
+		/* explosionType        */ EXPLOSION_IMPACT_MEDIUM,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 57
 	},
@@ -957,7 +958,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 80,
 		/* fireDistance         */ 8,
 		/* damage               */ 60,
-		/* explosionType        */ -1,
+		/* explosionType        */ EXPLOSION_INVALID,
 		/* bulletType           */ UNIT_SONIC_BLAST,
 		/* bulletSound          */ 43
 	},
@@ -1030,7 +1031,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 50,
 		/* fireDistance         */ 3,
 		/* damage               */ 5,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 59
 	},
@@ -1103,7 +1104,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 50,
 		/* fireDistance         */ 3,
 		/* damage               */ 5,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 59
 	},
@@ -1176,7 +1177,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 50,
 		/* fireDistance         */ 3,
 		/* damage               */ 7,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_BULLET,
 		/* bulletSound          */ 59
 	},
@@ -1249,7 +1250,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 0,
 		/* damage               */ 0,
-		/* explosionType        */ -1,
+		/* explosionType        */ EXPLOSION_INVALID,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 0
 	},
@@ -1322,7 +1323,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 0,
 		/* damage               */ 0,
-		/* explosionType        */ -1,
+		/* explosionType        */ EXPLOSION_INVALID,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 0
 	},
@@ -1395,7 +1396,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 15,
 		/* damage               */ 100,
-		/* explosionType        */ 11,
+		/* explosionType        */ EXPLOSION_DEATH_HAND,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 42
 	},
@@ -1468,7 +1469,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 8,
 		/* damage               */ 75,
-		/* explosionType        */ 3,
+		/* explosionType        */ EXPLOSION_IMPACT_EXPLODE,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 42
 	},
@@ -1541,7 +1542,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 60,
 		/* damage               */ 75,
-		/* explosionType        */ 3,
+		/* explosionType        */ EXPLOSION_IMPACT_EXPLODE,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 42
 	},
@@ -1614,7 +1615,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 7,
 		/* damage               */ 75,
-		/* explosionType        */ 7,
+		/* explosionType        */ EXPLOSION_DEVIATOR_GAS,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 42
 	},
@@ -1687,7 +1688,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 3,
 		/* damage               */ 0,
-		/* explosionType        */ 18,
+		/* explosionType        */ EXPLOSION_MINI_ROCKET,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ 64
 	},
@@ -1760,7 +1761,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 0,
 		/* damage               */ 0,
-		/* explosionType        */ 0,
+		/* explosionType        */ EXPLOSION_IMPACT_SMALL,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ -1
 	},
@@ -1833,7 +1834,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 10,
 		/* damage               */ 25,
-		/* explosionType        */ -1,
+		/* explosionType        */ EXPLOSION_INVALID,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ -1
 	},
@@ -1906,7 +1907,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 20,
 		/* fireDistance         */ 0,
 		/* damage               */ 300,
-		/* explosionType        */ 13,
+		/* explosionType        */ EXPLOSION_SANDWORM_SWALLOW,
 		/* bulletType           */ UNIT_SANDWORM,
 		/* bulletSound          */ 63
 	},
@@ -1979,7 +1980,7 @@ UnitInfo g_table_unitInfo[] = {
 		/* fireDelay            */ 0,
 		/* fireDistance         */ 0,
 		/* damage               */ 0,
-		/* explosionType        */ -1,
+		/* explosionType        */ EXPLOSION_INVALID,
 		/* bulletType           */ UNIT_INVALID,
 		/* bulletSound          */ -1
 	}

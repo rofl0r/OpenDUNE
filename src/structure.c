@@ -13,6 +13,7 @@
 
 #include "animation.h"
 #include "audio/sound.h"
+#include "explosion.h"
 #include "gfx.h"
 #include "gui/gui.h"
 #include "gui/widget.h"
@@ -1079,7 +1080,7 @@ bool Structure_Damage(Structure *s, uint16 damage, uint16 range)
 
 	if (range == 0) return false;
 
-	Map_MakeExplosion(2, Tile_AddTileDiff(s->o.position, g_table_structure_layoutTileDiff[si->layout]), 0, 0);
+	Map_MakeExplosion(EXPLOSION_IMPACT_LARGE, Tile_AddTileDiff(s->o.position, g_table_structure_layoutTileDiff[si->layout]), 0, 0);
 	return false;
 }
 
