@@ -113,7 +113,7 @@ Unit *Unit_Allocate(uint16 index, uint8 type, uint8 houseID)
 	if (type == 0xFF || houseID == 0xFF) return NULL;
 
 	h = House_Get_ByIndex(houseID);
-	if (h->unitCount >= h->unitCountMax) {
+	if (g_playerHouseID != houseID && h->unitCount >= h->unitCountMax) {
 		if (g_table_unitInfo[type].movementType != MOVEMENT_WINGER && g_table_unitInfo[type].movementType != MOVEMENT_SLITHER) {
 			if (g_validateStrictIfZero == 0) return NULL;
 		}
