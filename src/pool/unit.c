@@ -97,6 +97,18 @@ void Unit_Recount(void)
 	}
 }
 
+static uint Unit_FindUnusedIndex(uint type) {
+	uint index;
+	uint indexStart = g_table_unitInfo[type].indexStart;
+	uint indexEnd   = g_table_unitInfo[type].indexEnd;
+	for (index = indexStart; index <= indexEnd; index++) {
+		Unit *u = Unit_Get_ByIndex(index);
+		if (!u->o.flags.s.used) break;
+	}
+	if (index > indexEnd) return UNIT_INDEX_INVALID;
+	return index;
+}
+
 /**
  * Allocate a Unit.
  *
@@ -120,14 +132,9 @@ Unit *Unit_Allocate(uint16 index, uint8 type, uint8 houseID)
 	}
 
 	if (index == 0 || index == UNIT_INDEX_INVALID) {
-		uint16 indexStart = g_table_unitInfo[type].indexStart;
-		uint16 indexEnd   = g_table_unitInfo[type].indexEnd;
-
-		for (index = indexStart; index <= indexEnd; index++) {
-			u = Unit_Get_ByIndex(index);
-			if (!u->o.flags.s.used) break;
-		}
-		if (index > indexEnd) return NULL;
+		index = Unit_FindUnusedIndex(type);
+		if(index == UNIT_INDEX_INVALID) return NULL;
+		u = Unit_Get_ByIndex(index);
 	} else {
 		u = Unit_Get_ByIndex(index);
 		if (u->o.flags.s.used) return NULL;
