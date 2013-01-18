@@ -1480,13 +1480,13 @@ static void GUI_EndStats_Sleep(uint delay)
  */
 void GUI_EndStats_Show(uint killedAllied, uint killedEnemy, uint destroyedAllied, uint destroyedEnemy, uint harvestedAllied, uint harvestedEnemy, int score, uint houseID)
 {
-	uint16 width;
-	uint16 oldScreenID;
-	uint16 loc16;
-	uint16 loc18;
-	uint16 loc1A;
-	uint16 loc32[3][2][2];
-	uint16 i;
+	uint width;
+	uint oldScreenID;
+	uint loc16;
+	uint loc18;
+	uint loc1A;
+	uint loc32[3][2][2];
+	uint i;
 
 	s_ticksPlayed = ((g_timerGame - g_tickScenarioStart) / 3600) + 1;
 
@@ -1532,11 +1532,8 @@ void GUI_EndStats_Show(uint killedAllied, uint killedEnemy, uint destroyedAllied
 	loc32[2][1][0] = destroyedAllied;
 
 	for (i = 0; i < loc16; i++) {
-		uint16 loc08 = loc32[i][0][0];
-		uint16 loc0A = loc32[i][1][0];
-
-		if (loc08 >= 65000) loc08 = 65000;
-		if (loc0A >= 65000) loc0A = 65000;
+		uint loc08 = loc32[i][0][0];
+		uint loc0A = loc32[i][1][0];
 
 		loc32[i][0][0] = loc08;
 		loc32[i][1][0] = loc0A;
@@ -1552,17 +1549,17 @@ void GUI_EndStats_Show(uint killedAllied, uint killedEnemy, uint destroyedAllied
 	GUI_EndStats_Sleep(45);
 
 	for (i = 0; i < loc16; i++) {
-		uint16 loc02;
+		uint loc02;
 
 		GUI_HallOfFame_Tick();
 
 		for (loc02 = 0; loc02 < 2; loc02++) {
 			uint8 colour;
-			uint16 loc04;
-			uint16 locdi;
-			uint16 loc0E;
-			uint16 loc10;
-			uint16 loc0C;
+			uint loc04;
+			uint locdi;
+			uint loc0E;
+			uint loc10;
+			uint loc0C;
 
 			GUI_HallOfFame_Tick();
 

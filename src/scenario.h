@@ -33,8 +33,8 @@ typedef struct Scenario {
 	uint16 killedEnemy;                                     /*!< Number of units lost by "Enemy". */
 	uint16 destroyedAllied;                                 /*!< Number of structures lost by "You". */
 	uint16 destroyedEnemy;                                  /*!< Number of structures lost by "Enemy". */
-	uint16 harvestedAllied;                                 /*!< Total amount of spice harvested by "You". */
-	uint16 harvestedEnemy;                                  /*!< Total amount of spice harvested by "Enemy". */
+	uint harvestedAllied;                                   /*!< Total amount of spice harvested by "You". */
+	uint harvestedEnemy;                                    /*!< Total amount of spice harvested by "Enemy". */
 	Reinforcement reinforcement[16];                        /*!< Reinforcement information. */
 } Scenario;
 
